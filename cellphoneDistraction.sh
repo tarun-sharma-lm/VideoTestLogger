@@ -7,7 +7,6 @@ LOG_BASE_PATH="/home/tarunsharma/CellphoneDetectionScript/Logs"
 DEVICE_BASE_PATH="/sdcard/device-test-resources/aiTesting/cellphone"
 LOCAL_BASE_PATH="/home/tarunsharma/CellphoneDetectionScript/Videos"
 FAILEDTESTCASEPATH="/home/tarunsharma/CellphoneDetectionScript/ListOfFailedTestcase.txt"
-isFirst=true
 
 # clear logs directory 
 rm -rf "$LOG_BASE_PATH"/*
@@ -22,7 +21,6 @@ fi
 # clear before uploading and upload
 
 adb shell rm -rf "$DEVICE_BASE_PATH"/*
-adb push "${LOCAL_BASE_PATH}/." "$DEVICE_BASE_PATH/"
 
 # Create List of FileNames
 for FILE in "$LOCAL_BASE_PATH"/*; do
@@ -30,18 +28,17 @@ for FILE in "$LOCAL_BASE_PATH"/*; do
     LOGFILENAME="${FILENAME%%.*}.log"
     LOGFILEPATH=$LOG_BASE_PATH/$LOGFILENAME
     echo "$FILENAME"
+    adb push "${FILE}" "$DEVICE_BASE_PATH/"
     adb root
     adb logcat -b all -c 
     TEST_OUTPUT=$(adb shell am instrument -w -m -e filename "$FILENAME" -e debug false -e class 'lightmetrics.lib.CellphoneDistractionTest#testVideo' lightmetrics.lib.test/androidx.test.runner.AndroidJUnitRunner)
     if [[ "$TEST_OUTPUT" == *"FATAL EXCEPTION"* ]]; 
     then 
         echo "$FILENAME" >> $FAILEDTESTCASEPATH
+        adb shell rm -rf "$DEVICE_BASE_PATH/$FILE"
         continue
     fi
     adb logcat -d -s 'SnpeWhyDistractionNativ' > "$LOGFILEPATH"
-    if $isFirst; then
-        isFirst=false
-    else
-        sed -i '2,26d' $LOGFILEPATH
-    fi
+    sed -i '1,/initNativeObject: Initialized Why-Distraction native wrapper/d' $LOGFILEPATH
+    adb shell rm -rf "$DEVICE_BASE_PATH/$FILE"
 done
