@@ -13,8 +13,14 @@ isFirst=true
 rm -rf "$LOG_BASE_PATH"/*
 rm -rf "$FAILEDTESTCASEPATH"
 touch "$FAILEDTESTCASEPATH"
-
+if [ ! -e "$LOG_BASE_PATH" ]; then
+    mkdir $LOG_BASE_PATH
+fi
+if [ ! -e "$LOCAL_BASE_PATH" ]; then
+    mkdir $LOCAL_BASE_PATH
+fi
 # clear before uploading and upload
+
 adb shell rm -rf "$DEVICE_BASE_PATH"/*
 adb push "${LOCAL_BASE_PATH}/." "$DEVICE_BASE_PATH/"
 
