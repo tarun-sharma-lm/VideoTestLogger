@@ -34,15 +34,13 @@ for FILE in "$LOCAL_BASE_PATH"/*; do
     adb push "${FILE}" "$DEVICE_BASE_PATH/"
     adb logcat -b all -c 
     TEST_OUTPUT=$(adb shell am instrument -w -m -e filename "$FILENAME" -e debug false -e class "lightmetrics.lib.$CLASSNAME#$METHODNAME" lightmetrics.lib.test/androidx.test.runner.AndroidJUnitRunner)
-    if [[ "$TEST_OUTPUT" == *"FATAL EXCEPTION"* ]]; 
+    if [[ "$TEST_OUTPUT" == *"Process crashed."* ]]; 
     then 
         echo "$FILENAME" >> $FAILEDTESTCASEPATH
-        adb shell rm -rf "$DEVICE_BASE_PATH/$FILE"
+        adb shell rm -rf "$DEVICE_BASE_PATH/$FILENAME"
         continue
     fi
-    echo "$LOGFILEPATH"
     adb logcat -d -s 'SnpeWhyDistractionNativ' > "$LOGFILEPATH"
     # sed -i '1,/initNativeObject: Initialized Why-Distraction native wrapper/d' $LOGFILEPATH
-    echo ""$DEVICE_BASE_PATH"/"$FILENAME""
-    adb shell rm -rf "$DEVICE_BASE_PATH"/"$FILENAME"
+    adb shell rm -rf "$DEVICE_BASE_PATH/$FILENAME"
 done
