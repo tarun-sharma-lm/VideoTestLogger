@@ -27,7 +27,7 @@ adb logcat -G 512M
 adb shell rm -rf "$DEVICE_BASE_PATH"/*
 adb root
 COUNT=0
-RESTART_INTERVAL=40
+RESTART_INTERVAL=10
 # Create List of FileNames
 for FILE in "$LOCAL_BASE_PATH"/*; do
     COUNT=$((COUNT + 1))
