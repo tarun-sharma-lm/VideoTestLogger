@@ -23,7 +23,6 @@ if [ ! -e "$LOCAL_BASE_PATH" ]; then
 fi
 # clear before uploading and upload
 
-adb logcat -G 512M
 adb shell rm -rf "$DEVICE_BASE_PATH"/*
 adb root
 COUNT=0
