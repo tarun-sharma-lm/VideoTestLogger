@@ -3,7 +3,7 @@
 ## Create Videos directory and put videos in it.
 
 ## Need to do some changes in Android Studios
-InstrumentationRegistry.getArguments().getString("filename")
-"${rootDirectory}/${filename}"
+val filename = InstrumentationRegistry.getArguments().getString("filename")
+val s3FileUrl = "${rootDirectory}/${filename}"
 
 ## This also creates a text file that lists the name of the vidoes that failed the testcase
