@@ -10,6 +10,7 @@ DEVICE_BASE_PATH="/sdcard/device-test-resources/aiTesting/cellphone"
 LOCAL_BASE_PATH="./Videos"
 FAILEDTESTCASEPATH="./ListOfFailedTestcase.txt"
 DEVICE_LOG_PATH="/data/data/lightmetrics.lib.test/files/lightmetrics"
+TAG="SnpeWhyDistractionNativ"
 
 # clear logs directory 
 rm -rf "$LOG_BASE_PATH"/*
@@ -47,7 +48,7 @@ for FILE in "$LOCAL_BASE_PATH"/*; do
     adb pull $DEVICE_LOG_PATH $LOG_BASE_PATH
     lm-utils log -i $LOG_BASE_PATH/lightmetrics/*.log.lzma.e2 > $LOGFILEPATH
     lm-utils log -i $LOG_BASE_PATH/lightmetrics/logs/*.log.e2 >> $LOGFILEPATH
-    sed -i '/SnpeWhyDistractionNativ/!d' $LOGFILEPATH
+    sed -i "/$TAG/!d" $LOGFILEPATH
 
     rm -rf $LOG_BASE_PATH/lightmetrics
 
